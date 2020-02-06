@@ -6,5 +6,6 @@ namespace LuckySpin.Models
     {
         public long Id { get; set; }
         public Boolean IsWinning { get; set; }
+
     }
 }
