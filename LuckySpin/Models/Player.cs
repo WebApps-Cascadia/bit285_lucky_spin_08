@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
 namespace LuckySpin.Models
 {
     public class Player
@@ -11,6 +13,6 @@ namespace LuckySpin.Models
         public Decimal Balance { get; set; }
 
         //TODO: Add a Navigation Property representing the Player's Spins
-
+        public ICollection<Spin> Spins { get; set; } //update error may indicate that your data base is mismatched
     }
 }
