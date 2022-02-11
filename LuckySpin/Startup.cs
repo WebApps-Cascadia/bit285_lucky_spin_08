@@ -32,8 +32,6 @@ namespace LuckySpin
 
             services.AddDbContext<LuckySpinContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("LuckySpinDb")));
-            //TODO: (Mac) Adjust the DbContext options to
-            //  options.UseSqlite(...)
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
