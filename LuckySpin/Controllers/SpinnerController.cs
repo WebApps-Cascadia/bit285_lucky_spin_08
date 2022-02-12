@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using LuckySpin.Models;
 using LuckySpin.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuckySpin.Controllers
 {
@@ -52,10 +53,10 @@ namespace LuckySpin.Controllers
          public IActionResult Spin(long id)
         {
             //** Gets the Player belonging to the given id
-            //TODO: Modify the code to use the SingleOrDefault Lamda Extension method
-            //       Including the Player's Spins
-            Player player = _dbc.Players.Find(id);
-
+            // Modify the code to use the SingleOrDefault Lamda Extension method
+            // Including the Player's Spins
+            Player player = _dbc.Players.Include(p => p.Spins).SingleOrDefault(p => p.Id == id);
+                
             // Populates a new SpinViewModel for this spin
             // using the player information
             SpinViewModel spinVM = new SpinViewModel() {
@@ -81,10 +82,13 @@ namespace LuckySpin.Controllers
                 IsWinning = spinVM.Winner
             };
 
-            //** Adds the Spin to the Database Context
-            //TODO: AFTER answering Question 3, modify the next line to use the Player's Spin collection instead of a global Spin
-            _dbc.Spins.Add(spin);
+            player.Spins.Add(spin);
 
+            //** Adds the Spin to the Database Context
+            //AFTER answering Question 3, modify the next line to use the Player's Spin collection instead of a global Spin
+            _dbc.Spins.Add(
+                player.Spins.ElementAt(
+                    player.Spins.Count()-1));
             //**** Saves all the changes to the Database at once
             _dbc.SaveChanges();
 
@@ -98,12 +102,15 @@ namespace LuckySpin.Controllers
          public IActionResult LuckList(long id)
         {
             //Gets the Player belonging to the given id
-            //TODO: Modify the code to use the SingleOrDefault Lamda Extension method
-            Player player = _dbc.Players.Find(id);
+            // Modify the code to use the SingleOrDefault Lamda Extension method
+            Player player = _dbc.Players.SingleOrDefault(p => p.Id == id);
+            
+
             //Gets the list of Spins from the Context
-            //TODO: Modify the next line to get the list of the Player's Spins instead of all the Spins
-            IEnumerable<Spin> spins = _dbc.Spins;
-            // Hack in some detail about the player
+            // Modify the next line to get the list of the Player's Spins instead of all the Spins
+            IEnumerable<Spin> spins = _dbc.Spins.FromSqlInterpolated($"SELECT * FROM dbo.Spins WHERE PlayerID={player.Id}");
+                                
+            //Hack in some detail about the player
             ViewBag.Player = player;
 
             return View(spins);

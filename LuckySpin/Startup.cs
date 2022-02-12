@@ -30,8 +30,7 @@ namespace LuckySpin
             //services.AddSingleton<Repository>();
            
 
-            services.AddDbContext<LuckySpinContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("LuckySpinDb")));
+            services.AddDbContext<LuckySpinContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LuckySpinDb")));
             //TODO: (Mac) Adjust the DbContext options to
             //  options.UseSqlite(...)
         }
