@@ -14,7 +14,7 @@
         {
             var result = (spin.IsWinning) ? "Win" : "Lose";
             num++; //increment the row number
-            <tr @if (spin.IsWinning)
+            <tr> @if (spin.IsWinning)
                 {<text> style='background-color:lightgreen;' </text> }
                 >
                 <td>@num</td>
